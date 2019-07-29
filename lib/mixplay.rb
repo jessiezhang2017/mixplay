@@ -19,7 +19,6 @@ class MixplayManager
   private
   def load_data(input_file)
     json_obj = JSON.parse(File.read("./file/#{input_file}"))
-    puts(json_obj["users"])
 
     # load users
     json_obj["users"].each do |user|
@@ -27,19 +26,16 @@ class MixplayManager
       name = user["name"]
       @users[id] = User.new(user["id"], user["name"])
     end
-    puts(@users)
 
     # load playlist
     json_obj["playlists"].each do |playlist|
       id = playlist["id"]
       user_id = playlist["user_id"]
       song_ids = playlist["song_ids"]
-      puts("song_ids")
-      puts(song_ids)
+
       @playlists[id] = Playlist.new(id, user_id, song_ids[0])
       size = song_ids.length
-      puts("size")
-      puts(size)
+
       if size > 1
         i = 1
         while i < size do
@@ -84,7 +80,7 @@ class MixplayManager
       arr = @playlists.keys.sort
       # get the maximum key number and assign to variable called max_id
       max_id = arr[-1].to_i
-      puts("max_id #{max_id}")
+
       if playlist_addition.length > 0
         playlist_addition.each do |item|
           uid = item["user_id"]
