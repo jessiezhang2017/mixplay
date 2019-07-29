@@ -1,22 +1,22 @@
 {
   "add_song" : [
     {
-      "palylist_id" : "3",
+      "playlist_id" : "3",
       "song_id" : "3"
     },
     {
-      "palylist_id" : "2",
+      "playlist_id" : "2",
       "song_id" : "10"
     },
     {
-      "palylist_id" : "2",
+      "playlist_id" : "2",
       "song_id" : "11"
     }
 
   ],
   "add_playlist" : [
     {
-      "user_id" : "3",
+      "user_id" : "5",
       "song_ids" : [
         "36",
         "38",

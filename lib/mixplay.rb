@@ -34,15 +34,20 @@ class MixplayManager
       id = playlist["id"]
       user_id = playlist["user_id"]
       song_ids = playlist["song_ids"]
+      puts("song_ids")
+      puts(song_ids)
       @playlists[id] = Playlist.new(id, user_id, song_ids[0])
       size = song_ids.length
+      puts("size")
+      puts(size)
       if size > 1
         i = 1
         while i < size do
-          song_ids.push(song_ids[i])
+          @playlists[id].songs.push(song_ids[i])
           i += 1
         end
       end
+
     end
     puts(@playlists)
 
@@ -67,26 +72,25 @@ class MixplayManager
        song_addition = json_obj["add_song"]
       if song_addition.length > 0
         song_addition.each do |item|
-          add_song_id(item[playlist_id], item[song_id])
+          add_song_id(item["playlist_id"], item["song_id"])
         end
       end
-      puts(@playlists)
     end
 
     # Process add_playlist changes
     if json_obj["add_playlist"]
-      playlist_addition = joson_obj["add_playlist"]
+      playlist_addition = json_obj["add_playlist"]
       # get all the keys from hash @palylists into an array nanmed arr, and sort
       arr = @playlists.keys.sort
       # get the maximum key number and assign to variable called max_id
-      max_id = arr[-1]
+      max_id = arr[-1].to_i
       puts("max_id #{max_id}")
-      if size > 0
+      if playlist_addition.length > 0
         playlist_addition.each do |item|
           uid = item["user_id"]
           songs = item["song_ids"]
           max_id += 1
-          add_playlist(max_id, uid, songs)
+          add_playlist(max_id.to_s, uid, songs)
         end
       end
     end
@@ -96,17 +100,33 @@ class MixplayManager
       selected_list = json_obj["delete_playlist"]
       if selected_list.length > 0
         selected_list.each do |item|
-           delete_playlist(item[id])
+           delete_playlist(item["id"])
         end
       end
     end
   end
 
   def print_output(output_file)
-    tempHash = Hash.new()
 
+    userlists = Array.new()
+    playlists = Array.new()
+    songlists = Array.new()
 
-    File.open(output,"w") do |f|
+    @users.keys.each do |item|
+      userlists << {"id"=>item, "name"=>@users[item].name}
+    end
+
+    @playlists.keys.each do |item|
+      playlists << {"id"=>item, "user_id"=>@playlists[item].user_id, "songs"=>@playlists[item].songs }
+    end
+
+    @songs.keys.each do |item|
+      songlists << {"id"=>item, "artist"=>@songs[item].artist, "title"=>@songs[item].title }
+    end
+
+    tempHash = {"users"=>userlists, "playlists"=>playlists, "songs"=>songlists }
+
+    output_file = File.open("./file/#{output_file}","w") do |f|
       f.write(JSON.pretty_generate(tempHash))
     end
   end
@@ -118,28 +138,30 @@ class MixplayManager
       # get song fron the songs hash
       song_select = @songs[song_id]
       # get playlist from the playlists hash
-      playlist_selected = @playlists[playlist_id]
+      playlist_select = @playlists[playlist_id]
+
       # Add it to the playlist
-      if playlist_selected[song_select]
-        puts("song id #{song_selected} already added to playlist #{playlist_selected}")
+      if playlist_select.songs.include? song_id
+        puts("song id #{song_select} already added to playlist #{playlist_select}")
       else
-        playlist_selected.add_song(song_id)
+        playlist_select.add_song(song_id)
       end
     elsif !@songs[song_id]
       puts("song_id #{song_id} does not exist")
-    elsif !@playlist[playlist_id]
+    elsif !@playlists[playlist_id]
       puts("playlist_id #{playlist_id} does not exist")
     end
   end
 
   def add_playlist(id, user_id, song_ids)
+    #check if user_id exist
+    if !@users[user_id]
+      puts("user id #{user_id} does not exist")
+
     #check to see if the user_id already has a playlist, one user can only has one playlist
-    if @playlists[user_id]
+    elsif @playlists[user_id]
       puts("playlist already exists for user #{user_id}, adjust the change to under add_song")
 
-    #check if user_id exist
-    elsif !@user[user_id]
-      puts("user id #{user_id} does not exist")
     else
       #check if song_ids is an array
       if song_ids.is_a?(Array)
@@ -154,14 +176,14 @@ class MixplayManager
             end
           end
 
-          if song_id_valid
+          if song_ids_valid
             new_playlist = Playlist.new(id, user_id, song_ids[0])
             i = 1
             while(i < song_ids.length) do
               new_playlist.add_song(song_ids[i])
               i += 1
             end
-            @playlists.push(new_playlist)
+            @playlists[id] = new_playlist
           end
         end
       else
@@ -173,8 +195,8 @@ class MixplayManager
   def delete_playlist(id)
     # find playlist_id in @playlists
     # remove the selected playlist
-    if @playlist[id]
-      @playlist.delete(id)
+    if @playlists[id]
+      @playlists.delete(id)
     else
       puts("playlist id #{id} does not exist")
     end

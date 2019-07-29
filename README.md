@@ -10,11 +10,12 @@ Setup
 
 run program
 1. cd into lib folder
+2. cd into file folder , save the mixtape.json (input) and changes.json (changes)
 2. Run ruby processor.rb mixtape.json changes.json result.json
 
 check result
 1. cd into file folder
-2. result.json is the required result file
+2. result.json is the required result file (output)
 
 assumptions
 1. assume one user can have only have one playlist
