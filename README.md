@@ -15,3 +15,15 @@ run program
 check result
 1. cd into file folder
 2. result.json is the required result file
+
+assumptions
+1. assume one user can have only have one playlist
+2. all the info in mixtape.json are valid
+
+what changes would need to make in order to scale this application to handle very large input files and/or very large changes files?
+
+Can add a database to the program, save the data read from input file / changes file to  a database instead of save it to a hash or a map in the memory.
+
+Can split the one big file into small files, make one file only deal with one class of data input / data change.
+
+Instead of using File.read, which will pull in all the data of the file and save to a variable,  can use File.open. It will  give you a chance to read the file line by line or read a small portion each time.

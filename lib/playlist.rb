@@ -7,7 +7,6 @@ class Playlist
     @id = id
     @user_id = user_id
     @songs = [song_id]
-
   end
 
   # add an additional song to playlist
