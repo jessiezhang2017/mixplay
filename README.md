@@ -7,3 +7,10 @@ Setup
 4. Run gem install bundler if you do not have bundler installed
 5. Run bundle install to install ruby dependencies
 6. Run rake test to verify all tests are passing
+
+run program
+1. In mixplay folder
+2. Run ruby processor.rb mixtape.json changes.json result.json
+
+check result
+1. result.json is the required result file
