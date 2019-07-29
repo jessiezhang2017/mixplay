@@ -1,0 +1,43 @@
+{
+  "add_song" : [
+    {
+      "palylist_id" : "3",
+      "song_id" : "3"
+    },
+    {
+      "palylist_id" : "2",
+      "song_id" : "10"
+    },
+    {
+      "palylist_id" : "2",
+      "song_id" : "11"
+    }
+
+  ],
+  "add_playlist" : [
+    {
+      "id" : "4",
+      "user_id" : "3",
+      "song_ids" : [
+        "36",
+        "38",
+        "39"
+      ]
+    },
+    {
+      "id" : "5",
+      "user_id" : "7",
+      "song_ids" : [
+        "20",
+      ]
+    }
+  ],
+  "delete_playlist": [
+    {
+      "id" : "1",
+    },
+    {
+      "id" : "2",
+    }
+  ]
+}
